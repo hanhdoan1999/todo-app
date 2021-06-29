@@ -9,18 +9,18 @@ function Add({onAdd}) {
         e.preventDefault();
         if(!task){
             alert('Please add a text')
+        }else{
+            onAdd({task ,complete})
+            setTask('')
+            setComplete(false)
         }
-        onAdd({task ,complete})
-        setTask('')
-        setComplete(false)
-
     }
 
     return (
         <div className="addTask">
             <form action="" onSubmit={onSubmit}>
                 <input type="text" placeholder="Add task" value={task} onChange={(e) => setTask(e.target.value)}/>
-                <input type="submit" value="Add" className="btn" />
+                <input type="submit" value="Add" className="btn"/>
             </form>
         </div>
     )

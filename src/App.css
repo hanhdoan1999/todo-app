@@ -26,7 +26,10 @@
 }
 
 .content {
-  min-height: 200px;
+  min-height: 350px;
+  max-height: 380px;
+  overflow-y:auto;
+
   /* display: flex;
   justify-content: center;
   align-items: center; */
@@ -79,14 +82,9 @@
   width: 70%;
 }
 
-.btn-edit {
-  margin-right: 25px;
-}
-
-.edit-text {
-  display: none;
-}
-
-.text {
-  display: block;
+.truncate {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 350px;
 }

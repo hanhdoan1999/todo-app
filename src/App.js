@@ -37,13 +37,13 @@ function App() {
   }, [])
 
 
-  
   // const handleToggle = (item) => {
   //   let mapped = toDoList.map(todo => {
   //     return todo.id === item.id ? { ...todo, complete: !todo.complete } : { ...todo};
   //   });
   //   setToDoList(mapped);
   // }
+
   const fetchTask = async (id)=>{
     const res= await fetch(`https://60d8a43aeec56d001747740d.mockapi.io/todos/${id}`)
     const data = await res.json()
@@ -112,18 +112,36 @@ function App() {
 
   };
 
-  const handelEdit = (todo,task,complete) => {
-    let editTodos = toDoList.map((t) => {
-      if (t.id === todo.id) {
-        t.task=task;
-        t.complete=complete;
-      }
-      return t;
-    });
-    setToDoList(editTodos);
-    
+  const handelEdit = async (t,nameTodo) => {
+    const todoUpdate = await fetchTask(t.id)
+    const upTask ={...todoUpdate,task : nameTodo};
 
+    const res = await fetch(`https://60d8a43aeec56d001747740d.mockapi.io/todos/${t.id}`,{
+      method:'PUT',
+      headers:{
+        'Content-type':'application/json'
+      },
+      body: JSON.stringify(upTask),
+    })
+
+    const data = await res.json()
+    setToDoList(
+     toDoList.map((doto)=>doto.id===t.id ? {...doto,task:data.task} : doto)
+   )
+    
   }
+
+  // const handelEdit = (todo,task,complete) => {
+  //   let editTodos = toDoList.map((t) => {
+  //     if (t.id === todo.id) {
+  //       t.task=task;
+  //       t.complete=complete;
+  //     }
+  //     return t;
+  //   });
+  //   setToDoList(editTodos);
+    
+  // }
 
   return (
    <div className="container">
