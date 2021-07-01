@@ -1,5 +1,5 @@
 
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { FaRegTrashAlt, FaRegEdit, FaRegGrinBeam } from 'react-icons/fa';
 
 
@@ -12,23 +12,15 @@ function Todo({ todo, onDelete, onToggle, onEdit, }) {
     setCheck(todo.complete);
   }, [todo]);
 
-  console.log("item ", todo);
-
-  const getTextLine = () => {
-    let text = "text truncate";
-    text += (todo.complete) ? " strike" : ""
+  const getTextLine = useCallback(() => {
+    let text = check? "text truncate strike" : "text truncate";
     return text;
-  }
+  },[check]);
 
   const handleCheck = () => {
     setCheck(!check);
+    handleToggle(todo, !check)
   }
-
-  useEffect(() => {
-    if (todo) {
-      handleToggle(todo, check);
-    }
-  }, [ check ]);
 
   const handleToggle = async (t, check) => {
     // const taskToToggle = await fetchTask(t.id)
@@ -41,7 +33,11 @@ function Todo({ todo, onDelete, onToggle, onEdit, }) {
         'Content-type': 'application/json'
       },
       body: JSON.stringify(upTask),
-    })
+    });
+    console.log(res);
+    if (res.status !== 200) {
+      setCheck(!check);
+    }
   };
 
   const test = () => {
@@ -51,7 +47,7 @@ function Todo({ todo, onDelete, onToggle, onEdit, }) {
 
   return (
     <div className="item">
-      <input type="checkbox" name="status" onClick={handleCheck} checked={check} disabled={!editText} />
+      <input type="checkbox" name="status" onChange={handleCheck} checked={check} disabled={!editText} />
       {editText
         ?
         (<p onDoubleClick={() => { setEditText(false); }} className={getTextLine()} >{todo.task}</p>)
